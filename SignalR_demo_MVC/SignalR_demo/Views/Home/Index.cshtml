@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    @model List<Emp>
+
+}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="~/js/signalr.js"></script>
+
+<body>
+    <div>
+        <div class="" style="text-align: right;">
+            <button type="button" class="btn btn-primary btn-lg" onclick='window.location.href="/home/Add"'>Add Employee</button>
+        </div>
+
+        <table id="dataTable" class="table mt-4">
+            <thead class="thead-dark">
+                <tr>
+               <th>Id
+               </th>
+               <th>Name</th>
+               <th>ContactNo</th>
+               <th>Gender</th>
+               <th>Age</th>
+                </tr>
+           </thead>
+           <tbody>
+
+           </tbody>
+       </table>
+     
+    </div>
+</body>
+
+<script>
+     var no = 1;
+
+
+  
+  
+    $(document).ready(function () {
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/emp-hub").build();
+
+        connection.start()
+            .then(function () {
+                console.log("connection established");
+            })
+            .catch(function (error) {
+                console.log(error.toString());
+            });
+
+        connection.on("EmpAddData", function (data) {
+            console.log(data);
+        });
+
+
+        $.ajax({
+            url: '/Home/GetAllEmployees',
+            method: 'GET',
+            dataType: 'json', 
+            success: function (res) {
+             
+                $.each(res.data, function (index, item) {
+                    // Append data to the table
+                    $('#dataTable tbody').append('<tr><td>' + item.id + '</td><td>' + item.name + '</td><td>' + item.phone_no + '</td><td>' + item.gender + '</td><td>' +item.age+ '</td></tr>');
+                });
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    });
+
+</script>
