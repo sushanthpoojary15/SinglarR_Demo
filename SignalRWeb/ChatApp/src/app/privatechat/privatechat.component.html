@@ -1,0 +1,17 @@
+<div class="model-header">
+    <h4 class="modal-title">{{toUser}}</h4>
+    <button type="button" class="btn-close" (click)="activeModel.dismiss('Cross click')"></button>
+</div>
+<div class="model-body">
+    <div class="card border-secondary">
+        <div class="card-header h3 text-muted text-center">
+            Messages
+        </div>
+        <div class="card-body">
+            <app-messages [messages] = "chatService.privateMessages"></app-messages>
+        </div>
+        <div class="card-footer">
+            <app-chat-input (contentEmitter)="sendMessage($event)"></app-chat-input>
+        </div>
+    </div>
+</div>
